@@ -1,4 +1,4 @@
-class RotaryDial extends HTMLElement {
+class KuroDenwa extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
@@ -15,6 +15,9 @@ class RotaryDial extends HTMLElement {
         this.highlightedNumber = null;
         this.numberPositions = [];
 
+        // モーダル状態
+        this.isModal = false;
+
         // ダイヤル設定
         this.centerX = 0;
         this.centerY = 0;
@@ -26,22 +29,115 @@ class RotaryDial extends HTMLElement {
         this.render();
     }
 
+    static get observedAttributes() {
+        return ['modal', 'open'];
+    }
+
+    attributeChangedCallback(name, _oldValue, newValue) {
+        if (name === 'modal') {
+            this.isModal = newValue !== null;
+        } else if (name === 'open') {
+            this.updateOpenState();
+        }
+    }
+
     connectedCallback() {
-        this.setupCanvas();
-        this.updateDimensions();
-        this.initNumberPositions();
-        this.drawDial();
+        // 常にモーダルモードとして動作
+        this.isModal = true;
+        this.setAttribute('modal', '');
+
         this.attachEventListeners();
+
+        // 初期状態では非表示
+        if (!this.hasAttribute('open')) {
+            // 何もしない（非表示のまま）
+        } else {
+            // openが指定されている場合は初期化
+            this.setupCanvas();
+            this.updateDimensions();
+            this.initNumberPositions();
+            this.drawDial();
+        }
     }
 
     render() {
         const template = `
             <style>
                 :host {
-                    display: block;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    z-index: 9999;
+                    display: none;
+                }
+
+                :host(.open) {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: fadeIn 0.3s ease-out;
+                }
+
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                    }
+                    to {
+                        opacity: 1;
+                    }
+                }
+
+                @keyframes slideIn {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.9) translateY(20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1) translateY(0);
+                    }
+                }
+
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
                     width: 100%;
-                    max-width: 600px;
-                    margin: 0 auto;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    backdrop-filter: blur(5px);
+                    z-index: 1;
+                    animation: fadeIn 0.3s ease-out;
+                }
+
+                .close-button {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    background: rgba(255, 255, 255, 0.2);
+                    border: none;
+                    color: white;
+                    font-size: 32px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    z-index: 10;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
+                    padding: 0;
+                    font-family: Arial, sans-serif;
+                    font-weight: normal;
+                }
+
+                .close-button:hover {
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: scale(1.1);
                 }
 
                 .container {
@@ -52,6 +148,17 @@ class RotaryDial extends HTMLElement {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    position: relative;
+                    z-index: 2;
+                    max-width: 600px;
+                    width: 90%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    animation: slideIn 0.4s ease-out;
+                }
+
+                :host(.open) .container.loading {
+                    opacity: 0;
                 }
 
                 .title {
@@ -158,7 +265,9 @@ class RotaryDial extends HTMLElement {
                 }
             </style>
 
+            <div class="modal-overlay" id="modalOverlay"></div>
             <div class="container">
+                <button class="close-button" id="closeBtn">×</button>
                 <div class="title">🖤 黒電話ダイヤル 🖤</div>
                 <div class="display">
                     <div class="number-display" id="numberDisplay">-</div>
@@ -180,6 +289,9 @@ class RotaryDial extends HTMLElement {
         this.numberDisplay = this.shadowRoot.getElementById('numberDisplay');
         this.clearBtn = this.shadowRoot.getElementById('clearBtn');
         this.callBtn = this.shadowRoot.getElementById('callBtn');
+        this.closeBtn = this.shadowRoot.getElementById('closeBtn');
+        this.modalOverlay = this.shadowRoot.getElementById('modalOverlay');
+        this.container = this.shadowRoot.querySelector('.container');
     }
 
     setupCanvas() {
@@ -532,6 +644,16 @@ class RotaryDial extends HTMLElement {
             }
         });
 
+        // モーダルのクローズボタン
+        this.closeBtn.addEventListener('click', () => {
+            this.close();
+        });
+
+        // オーバーレイクリックでモーダルを閉じる
+        this.modalOverlay.addEventListener('click', () => {
+            this.close();
+        });
+
         // リサイズ対応
         window.addEventListener('resize', () => {
             this.setupCanvas();
@@ -574,7 +696,62 @@ class RotaryDial extends HTMLElement {
         }
     }
 
-    // 公開API
+    updateOpenState() {
+        const isOpen = this.hasAttribute('open');
+        if (isOpen) {
+            this.classList.add('open');
+
+            // ローディング状態を表示
+            if (this.container) {
+                this.container.classList.add('loading');
+            }
+
+            // モーダルを開くときにCanvasを初期化
+            setTimeout(() => {
+                this.setupCanvas();
+                this.updateDimensions();
+                if (this.numberPositions.length === 0) {
+                    this.initNumberPositions();
+                }
+                this.drawDial();
+
+                // ローディング状態を解除（スムーズに表示）
+                setTimeout(() => {
+                    if (this.container) {
+                        this.container.classList.remove('loading');
+                    }
+                }, 50);
+            }, 150); // フェードイン中に初期化
+
+            this.dispatchEvent(new CustomEvent('opened'));
+        } else {
+            this.classList.remove('open');
+            this.dispatchEvent(new CustomEvent('closed'));
+        }
+    }
+
+    // 公開API - モーダル制御
+    get isShow() {
+        return this.hasAttribute('open');
+    }
+
+    set isShow(value) {
+        if (value) {
+            this.setAttribute('open', '');
+        } else {
+            this.removeAttribute('open');
+        }
+    }
+
+    open() {
+        this.isShow = true;
+    }
+
+    close() {
+        this.isShow = false;
+    }
+
+    // 公開API - ダイヤル操作
     getDialedNumbers() {
         return [...this.dialNumbers];
     }
@@ -586,4 +763,4 @@ class RotaryDial extends HTMLElement {
 }
 
 // カスタム要素として登録
-customElements.define('rotary-dial', RotaryDial);
+customElements.define('kuro-denwa', KuroDenwa);

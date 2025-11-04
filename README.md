@@ -1,10 +1,11 @@
-# 黒電話ロータリーダイヤル Web Component
+# 黒電話 (Kuro-Denwa) Web Component
 
 本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Componentです。
+モーダル表示で画面中央に表示され、`isShow`プロパティで簡単に表示/非表示を制御できます。
 
 ## デモ
 
-`demo.html`をブラウザで開いてデモを確認できます。
+`index.html`をブラウザで開いてデモを確認できます。
 
 ## 使い方
 
@@ -15,14 +16,27 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Rotary Dial Example</title>
+    <title>Kuro-Denwa Example</title>
 </head>
 <body>
     <!-- Web Componentを配置 -->
-    <rotary-dial></rotary-dial>
+    <kuro-denwa id="myDial"></kuro-denwa>
 
     <!-- JavaScriptを読み込み -->
-    <script src="rotary-dial-component.js"></script>
+    <script src="kuro-denwa-component.js"></script>
+
+    <script>
+        const dial = document.getElementById('myDial');
+
+        // モーダルを開く
+        function openDial() {
+            dial.isShow = true;
+            // または dial.open();
+        }
+
+        // ボタンなどから開く
+        // <button onclick="openDial()">ダイヤルを開く</button>
+    </script>
 </body>
 </html>
 ```
@@ -30,7 +44,7 @@
 ### イベントリスナーの設定
 
 ```javascript
-const dial = document.querySelector('rotary-dial');
+const dial = document.querySelector('kuro-denwa');
 
 // 番号が入力されたとき
 dial.addEventListener('number-dialed', (e) => {
@@ -54,17 +68,42 @@ dial.addEventListener('call', (e) => {
 
 #### メソッド
 
+##### ダイヤル操作
+
 - `getDialedNumbers()` - 入力された番号の配列を取得
 - `clear()` - 入力された番号をクリア
 
 ```javascript
-const dial = document.querySelector('rotary-dial');
+const dial = document.querySelector('kuro-denwa');
 
 // 入力された番号を取得
 const numbers = dial.getDialedNumbers(); // [1, 2, 3, ...]
 
 // 番号をクリア
 dial.clear();
+```
+
+##### モーダル制御
+
+- `open()` - モーダルを開く
+- `close()` - モーダルを閉じる
+- `isShow` - モーダルの表示状態を取得/設定（プロパティ）
+
+```javascript
+const dial = document.querySelector('kuro-denwa');
+
+// モーダルを開く
+dial.open();
+// または
+dial.isShow = true;
+
+// モーダルを閉じる
+dial.close();
+// または
+dial.isShow = false;
+
+// 現在の状態を確認
+console.log(dial.isShow); // true or false
 ```
 
 ## イベント
@@ -74,16 +113,21 @@ dial.clear();
 | `number-dialed` | 番号が入力されたとき | `{ number: Number, allNumbers: Array }` |
 | `clear` | クリアボタンが押されたとき | なし |
 | `call` | 発信ボタンが押されたとき | `{ phoneNumber: String }` |
+| `opened` | モーダルが開いたとき | なし |
+| `closed` | モーダルが閉じたとき | なし |
 
 ## 機能
 
 - 本物の黒電話風のデザイン
+- モーダル表示（画面中央に表示）
 - ロータリーダイヤル操作（ドラッグで回転）
 - ドラッグ中の番号ハイライト
 - 銀色のストッパー金具
 - レスポンシブデザイン（PC・スマホ対応）
 - タッチデバイス対応
 - Shadow DOMによるカプセル化
+- `isShow`プロパティまたは`open()`/`close()`メソッドで表示/非表示を制御
+- オーバーレイクリック・×ボタンで閉じる
 
 ## ブラウザ対応
 
@@ -94,11 +138,9 @@ Custom Elements V1とShadow DOM V1をサポートしているブラウザが必�
 
 ```
 kuro-denwa/
-├── rotary-dial-component.js  # Web Component本体
-├── demo.html                  # デモページ
-├── index.html                 # オリジナル版
-├── rotary-dial.js            # オリジナル版JavaScript
-└── README.md                  # このファイル
+├── kuro-denwa-component.js  # Web Component本体
+├── index.html                # デモページ
+└── README.md                 # このファイル
 ```
 
 ## ライセンス

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>黒電話ダイヤル</title>
+    <title>Rotary Dial Web Component Demo</title>
     <style>
         * {
             margin: 0;
@@ -14,172 +14,191 @@
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            overflow: hidden;
-            padding: 10px;
-        }
-
-        .container {
-            background: #2a2a2a;
             padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 5px;
-            }
-
-            .container {
-                padding: 15px;
-                border-radius: 15px;
-            }
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         h1 {
             text-align: center;
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 28px;
+            color: white;
+            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 22px;
-                margin-bottom: 15px;
-            }
-        }
-
-        .display {
-            background: #1a1a1a;
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-            border: 3px solid #444;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .display {
-                padding: 15px;
-                margin-bottom: 20px;
-            }
-        }
-
-        .number-display {
-            font-size: 32px;
-            font-family: 'Courier New', monospace;
-            color: #00ff00;
-            min-height: 40px;
-            letter-spacing: 8px;
-            text-shadow: 0 0 10px #00ff00;
-        }
-
-        @media (max-width: 768px) {
-            .number-display {
-                font-size: 24px;
-                letter-spacing: 6px;
-                min-height: 30px;
-            }
-        }
-
-        #canvas {
-            display: block;
-            background: #1a1a1a;
-            border-radius: 50%;
-            box-shadow:
-                inset 0 0 30px rgba(0, 0, 0, 0.8),
-                0 10px 30px rgba(0, 0, 0, 0.5);
-            cursor: pointer;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .buttons {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .buttons {
-                margin-top: 15px;
-            }
-        }
-
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background: #667eea;
+            border-radius: 15px;
             color: white;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
         }
 
-        @media (max-width: 768px) {
-            button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
+        .info-box h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
         }
 
-        button:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        .info-box p {
+            margin-bottom: 10px;
+            line-height: 1.6;
         }
 
-        button:active {
-            transform: translateY(0);
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
         }
 
-        .info {
-            text-align: center;
-            color: #ccc;
-            margin-top: 15px;
+        .event-log {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .event-log h3 {
+            margin-bottom: 15px;
+        }
+
+        .event-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
             font-size: 14px;
         }
 
+        .event-time {
+            color: #00ff00;
+            margin-right: 10px;
+        }
+
         @media (max-width: 768px) {
-            .info {
-                font-size: 12px;
-                margin-top: 10px;
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+
+            .info-box {
+                padding: 15px;
+            }
+
+            .info-box h2 {
+                font-size: 18px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🖤 黒電話ダイヤル 🖤</h1>
-        <div class="display">
-            <div class="number-display" id="numberDisplay">-</div>
+    <div class="demo-container">
+        <h1>黒電話 Web Component Demo</h1>
+
+        <div class="info-box">
+            <h2>使い方</h2>
+            <p>このページは <code>&lt;kuro-denwa&gt;</code> Web Componentのデモです。</p>
+            <p>モーダル形式で黒電話のダイヤルを表示します。</p>
+            <p><code>&lt;kuro-denwa id="myDial"&gt;&lt;/kuro-denwa&gt;</code></p>
+            <p>モーダルは <code>isShow</code> プロパティまたは <code>open()</code> / <code>close()</code> メソッドで表示/非表示を切り替えます。</p>
         </div>
-        <canvas id="canvas"></canvas>
-        <div class="buttons">
-            <button id="clearBtn">クリア</button>
-            <button id="callBtn">発信</button>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <button onclick="openModal()" style="padding: 15px 30px; font-size: 18px; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+                📞 ダイヤルを開く
+            </button>
         </div>
-        <div class="info">
-            穴に指を入れてストッパーまで回してください
+
+        <!-- 黒電話ダイヤル（モーダル） -->
+        <kuro-denwa id="myDial"></kuro-denwa>
+
+        <!-- イベントログ -->
+        <div class="event-log">
+            <h3>イベントログ</h3>
+            <div id="logContainer">
+                <p style="color: #999;">イベントがここに表示されます...</p>
+            </div>
         </div>
     </div>
 
-    <script src="rotary-dial.js"></script>
+    <!-- Web Componentの読み込み -->
+    <script src="kuro-denwa-component.js"></script>
+
+    <!-- イベントリスナーの設定 -->
+    <script>
+        const dial = document.getElementById('myDial');
+        const logContainer = document.getElementById('logContainer');
+
+        function addLog(message) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ja-JP');
+
+            const logItem = document.createElement('div');
+            logItem.className = 'event-item';
+            logItem.innerHTML = `<span class="event-time">[${timeString}]</span>${message}`;
+
+            logContainer.insertBefore(logItem, logContainer.firstChild);
+
+            // ログが20件を超えたら古いものを削除
+            while (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        // モーダルを開く関数
+        function openModal() {
+            dial.isShow = true;
+            // または dial.open(); でも可
+        }
+
+        // イベントリスナー
+        dial.addEventListener('number-dialed', (e) => {
+            const { number, allNumbers } = e.detail;
+            addLog(`番号入力: <strong>${number}</strong> (現在: ${allNumbers.join('')})`);
+        });
+
+        dial.addEventListener('clear', () => {
+            addLog('番号をクリアしました');
+        });
+
+        dial.addEventListener('call', (e) => {
+            const { phoneNumber } = e.detail;
+            addLog(`📞 発信: <strong>${phoneNumber}</strong>`);
+            alert(`発信: ${phoneNumber}`);
+            // 発信後にモーダルを閉じる
+            dial.close();
+        });
+
+        dial.addEventListener('opened', () => {
+            addLog('ダイヤルを開きました');
+        });
+
+        dial.addEventListener('closed', () => {
+            addLog('ダイヤルを閉じました');
+        });
+
+        // 初期ログ
+        setTimeout(() => {
+            addLog('Web Component読み込み完了');
+        }, 100);
+
+        // API使用例
+        console.log('isShow:', dial.isShow);
+        console.log('入力番号:', dial.getDialedNumbers());
+    </script>
 </body>
 </html>
