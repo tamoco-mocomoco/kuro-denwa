@@ -3,7 +3,7 @@
 [![Deploy to GitHub Pages](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/pages.yml/badge.svg)](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/pages.yml)
 [![Release to CDN](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/release.yml/badge.svg)](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/release.yml)
 
-本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Componentです。
+本物の黒電話のような操作感を再現したロータリーダイヤルの Web Component です。
 モーダル表示で画面中央に表示され、`isShow`プロパティで簡単に表示/非表示を制御できます。
 
 ## インストール
@@ -19,14 +19,17 @@ npm install kuro-denwa
 ```html
 <!-- 最新版 -->
 <script type="module">
-  import 'https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js';
+  import "https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js";
 </script>
 ```
 
-または直接scriptタグで：
+または直接 script タグで：
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js"></script>
+<script
+  type="module"
+  src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js"
+></script>
 ```
 
 ## デモ
@@ -37,26 +40,26 @@ npm install kuro-denwa
 
 ## 使い方
 
-### npmでインストールした場合
+### npm でインストールした場合
 
 ```javascript
 // モジュールとしてインポート
-import 'kuro-denwa';
+import "kuro-denwa";
 
 // あとはHTMLで使用
 // <kuro-denwa id="myDial"></kuro-denwa>
 ```
 
-### CDNまたは直接読み込みの場合
+### CDN または直接読み込みの場合
 
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Kuro-Denwa Example</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Web Componentを配置 -->
     <kuro-denwa id="myDial"></kuro-denwa>
 
@@ -64,41 +67,41 @@ import 'kuro-denwa';
     <script src="kuro-denwa-component.js"></script>
 
     <script>
-        const dial = document.getElementById('myDial');
+      const dial = document.getElementById("myDial");
 
-        // モーダルを開く
-        function openDial() {
-            dial.isShow = true;
-            // または dial.open();
-        }
+      // モーダルを開く
+      function openDial() {
+        dial.isShow = true;
+        // または dial.open();
+      }
 
-        // ボタンなどから開く
-        // <button onclick="openDial()">ダイヤルを開く</button>
+      // ボタンなどから開く
+      // <button onclick="openDial()">ダイヤルを開く</button>
     </script>
-</body>
+  </body>
 </html>
 ```
 
 ### イベントリスナーの設定
 
 ```javascript
-const dial = document.querySelector('kuro-denwa');
+const dial = document.querySelector("kuro-denwa");
 
 // 番号が入力されたとき
-dial.addEventListener('number-dialed', (e) => {
-    console.log('入力された番号:', e.detail.number);
-    console.log('全ての番号:', e.detail.allNumbers);
+dial.addEventListener("number-dialed", (e) => {
+  console.log("入力された番号:", e.detail.number);
+  console.log("全ての番号:", e.detail.allNumbers);
 });
 
 // クリアボタンが押されたとき
-dial.addEventListener('clear', () => {
-    console.log('番号がクリアされました');
+dial.addEventListener("clear", () => {
+  console.log("番号がクリアされました");
 });
 
 // 発信ボタンが押されたとき
-dial.addEventListener('call', (e) => {
-    console.log('発信:', e.detail.phoneNumber);
-    // ここで実際の発信処理を実装
+dial.addEventListener("call", (e) => {
+  console.log("発信:", e.detail.phoneNumber);
+  // ここで実際の発信処理を実装
 });
 ```
 
@@ -112,7 +115,7 @@ dial.addEventListener('call', (e) => {
 - `clear()` - 入力された番号をクリア
 
 ```javascript
-const dial = document.querySelector('kuro-denwa');
+const dial = document.querySelector("kuro-denwa");
 
 // 入力された番号を取得
 const numbers = dial.getDialedNumbers(); // [1, 2, 3, ...]
@@ -128,7 +131,7 @@ dial.clear();
 - `isShow` - モーダルの表示状態を取得/設定（プロパティ）
 
 ```javascript
-const dial = document.querySelector('kuro-denwa');
+const dial = document.querySelector("kuro-denwa");
 
 // モーダルを開く
 dial.open();
@@ -146,13 +149,13 @@ console.log(dial.isShow); // true or false
 
 ## イベント
 
-| イベント名 | 説明 | イベント詳細 |
-|-----------|------|------------|
-| `number-dialed` | 番号が入力されたとき | `{ number: Number, allNumbers: Array }` |
-| `clear` | クリアボタンが押されたとき | なし |
-| `call` | 発信ボタンが押されたとき | `{ phoneNumber: String }` |
-| `opened` | モーダルが開いたとき | なし |
-| `closed` | モーダルが閉じたとき | なし |
+| イベント名      | 説明                       | イベント詳細                            |
+| --------------- | -------------------------- | --------------------------------------- |
+| `number-dialed` | 番号が入力されたとき       | `{ number: Number, allNumbers: Array }` |
+| `clear`         | クリアボタンが押されたとき | なし                                    |
+| `call`          | 発信ボタンが押されたとき   | `{ phoneNumber: String }`               |
+| `opened`        | モーダルが開いたとき       | なし                                    |
+| `closed`        | モーダルが閉じたとき       | なし                                    |
 
 ## 機能
 
@@ -163,14 +166,14 @@ console.log(dial.isShow); // true or false
 - 銀色のストッパー金具
 - レスポンシブデザイン（PC・スマホ対応）
 - タッチデバイス対応
-- Shadow DOMによるカプセル化
+- Shadow DOM によるカプセル化
 - `isShow`プロパティまたは`open()`/`close()`メソッドで表示/非表示を制御
-- オーバーレイクリック・×ボタンで閉じる
+- オーバーレイクリック・× ボタンで閉じる
 
 ## ブラウザ対応
 
 モダンブラウザ（Chrome, Firefox, Safari, Edge）で動作します。
-Custom Elements V1とShadow DOM V1をサポートしているブラウザが必要です。
+Custom Elements V1 と Shadow DOM V1 をサポートしているブラウザが必要です。
 
 ## ファイル構成
 
@@ -186,7 +189,3 @@ kuro-denwa/
 ## ライセンス
 
 MIT License
-
-## 貢献
-
-プルリクエストを歓迎します！
