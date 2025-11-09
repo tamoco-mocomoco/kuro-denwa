@@ -1,138 +1,155 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotary Dial Web Component Demo</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>黒電話のWeb Component デモ</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .info-box {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      .info-box h2 {
+        margin-bottom: 15px;
+        font-size: 20px;
+      }
+
+      .info-box p {
+        margin-bottom: 10px;
+        line-height: 1.6;
+      }
+
+      .info-box code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+      }
+
+      .event-log {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        padding: 20px;
+        border-radius: 15px;
+        color: white;
+        margin-top: 30px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .event-log h3 {
+        margin-bottom: 15px;
+      }
+
+      .event-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+      }
+
+      .event-time {
+        color: #00ff00;
+        margin-right: 10px;
+      }
+
+      @media (max-width: 768px) {
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .demo-container {
-            max-width: 800px;
-            margin: 0 auto;
+          padding: 10px;
         }
 
         h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+          font-size: 24px;
+          margin-bottom: 20px;
         }
 
         .info-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-            margin-bottom: 30px;
+          padding: 15px;
         }
 
         .info-box h2 {
-            margin-bottom: 15px;
-            font-size: 20px;
+          font-size: 18px;
         }
-
-        .info-box p {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .info-box code {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .event-log {
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-            margin-top: 30px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .event-log h3 {
-            margin-bottom: 15px;
-        }
-
-        .event-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-
-        .event-time {
-            color: #00ff00;
-            margin-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .info-box {
-                padding: 15px;
-            }
-
-            .info-box h2 {
-                font-size: 18px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="demo-container">
-        <h1>黒電話 Web Component Demo</h1>
+      <h1>黒電話 Web Component Demo</h1>
 
-        <div class="info-box">
-            <h2>使い方</h2>
-            <p>このページは <code>&lt;kuro-denwa&gt;</code> Web Componentのデモです。</p>
-            <p>モーダル形式で黒電話のダイヤルを表示します。</p>
-            <p><code>&lt;kuro-denwa id="myDial"&gt;&lt;/kuro-denwa&gt;</code></p>
-            <p>モーダルは <code>isShow</code> プロパティまたは <code>open()</code> / <code>close()</code> メソッドで表示/非表示を切り替えます。</p>
+      <div class="info-box">
+        <h2>使い方</h2>
+        <p>
+          このページは <code>&lt;kuro-denwa&gt;</code> Web Componentのデモです。
+        </p>
+        <p>モーダル形式で黒電話のダイヤルを表示します。</p>
+        <p><code>&lt;kuro-denwa id="myDial"&gt;&lt;/kuro-denwa&gt;</code></p>
+        <p>
+          モーダルは <code>isShow</code> プロパティまたは <code>open()</code> /
+          <code>close()</code> メソッドで表示/非表示を切り替えます。
+        </p>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 30px">
+        <button
+          onclick="openModal()"
+          style="
+            padding: 15px 30px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+          "
+        >
+          📞 ダイヤルを開く
+        </button>
+      </div>
+
+      <!-- 黒電話ダイヤル（モーダル） -->
+      <kuro-denwa id="myDial"></kuro-denwa>
+
+      <!-- イベントログ -->
+      <div class="event-log">
+        <h3>イベントログ</h3>
+        <div id="logContainer">
+          <p style="color: #999">イベントがここに表示されます...</p>
         </div>
-
-        <div style="text-align: center; margin-bottom: 30px;">
-            <button onclick="openModal()" style="padding: 15px 30px; font-size: 18px; background: #667eea; color: white; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                📞 ダイヤルを開く
-            </button>
-        </div>
-
-        <!-- 黒電話ダイヤル（モーダル） -->
-        <kuro-denwa id="myDial"></kuro-denwa>
-
-        <!-- イベントログ -->
-        <div class="event-log">
-            <h3>イベントログ</h3>
-            <div id="logContainer">
-                <p style="color: #999;">イベントがここに表示されます...</p>
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- Web Componentの読み込み -->
@@ -140,65 +157,67 @@
 
     <!-- イベントリスナーの設定 -->
     <script>
-        const dial = document.getElementById('myDial');
-        const logContainer = document.getElementById('logContainer');
+      const dial = document.getElementById("myDial");
+      const logContainer = document.getElementById("logContainer");
 
-        function addLog(message) {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('ja-JP');
+      function addLog(message) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString("ja-JP");
 
-            const logItem = document.createElement('div');
-            logItem.className = 'event-item';
-            logItem.innerHTML = `<span class="event-time">[${timeString}]</span>${message}`;
+        const logItem = document.createElement("div");
+        logItem.className = "event-item";
+        logItem.innerHTML = `<span class="event-time">[${timeString}]</span>${message}`;
 
-            logContainer.insertBefore(logItem, logContainer.firstChild);
+        logContainer.insertBefore(logItem, logContainer.firstChild);
 
-            // ログが20件を超えたら古いものを削除
-            while (logContainer.children.length > 20) {
-                logContainer.removeChild(logContainer.lastChild);
-            }
+        // ログが20件を超えたら古いものを削除
+        while (logContainer.children.length > 20) {
+          logContainer.removeChild(logContainer.lastChild);
         }
+      }
 
-        // モーダルを開く関数
-        function openModal() {
-            dial.isShow = true;
-            // または dial.open(); でも可
-        }
+      // モーダルを開く関数
+      function openModal() {
+        dial.isShow = true;
+        // または dial.open(); でも可
+      }
 
-        // イベントリスナー
-        dial.addEventListener('number-dialed', (e) => {
-            const { number, allNumbers } = e.detail;
-            addLog(`番号入力: <strong>${number}</strong> (現在: ${allNumbers.join('')})`);
-        });
+      // イベントリスナー
+      dial.addEventListener("number-dialed", (e) => {
+        const { number, allNumbers } = e.detail;
+        addLog(
+          `番号入力: <strong>${number}</strong> (現在: ${allNumbers.join("")})`
+        );
+      });
 
-        dial.addEventListener('clear', () => {
-            addLog('番号をクリアしました');
-        });
+      dial.addEventListener("clear", () => {
+        addLog("番号をクリアしました");
+      });
 
-        dial.addEventListener('call', (e) => {
-            const { phoneNumber } = e.detail;
-            addLog(`📞 発信: <strong>${phoneNumber}</strong>`);
-            alert(`発信: ${phoneNumber}`);
-            // 発信後にモーダルを閉じる
-            dial.close();
-        });
+      dial.addEventListener("call", (e) => {
+        const { phoneNumber } = e.detail;
+        addLog(`📞 発信: <strong>${phoneNumber}</strong>`);
+        alert(`発信: ${phoneNumber}`);
+        // 発信後にモーダルを閉じる
+        dial.close();
+      });
 
-        dial.addEventListener('opened', () => {
-            addLog('ダイヤルを開きました');
-        });
+      dial.addEventListener("opened", () => {
+        addLog("ダイヤルを開きました");
+      });
 
-        dial.addEventListener('closed', () => {
-            addLog('ダイヤルを閉じました');
-        });
+      dial.addEventListener("closed", () => {
+        addLog("ダイヤルを閉じました");
+      });
 
-        // 初期ログ
-        setTimeout(() => {
-            addLog('Web Component読み込み完了');
-        }, 100);
+      // 初期ログ
+      setTimeout(() => {
+        addLog("Web Component読み込み完了");
+      }, 100);
 
-        // API使用例
-        console.log('isShow:', dial.isShow);
-        console.log('入力番号:', dial.getDialedNumbers());
+      // API使用例
+      console.log("isShow:", dial.isShow);
+      console.log("入力番号:", dial.getDialedNumbers());
     </script>
-</body>
+  </body>
 </html>
