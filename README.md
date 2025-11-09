@@ -1,5 +1,8 @@
 # 黒電話 (Kuro-Denwa) Web Component
 
+[![Deploy to GitHub Pages](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/pages.yml/badge.svg)](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/pages.yml)
+[![Release to CDN](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/release.yml/badge.svg)](https://github.com/tamoco-mocomoco/kuro-denwa/actions/workflows/release.yml)
+
 本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Componentです。
 モーダル表示で画面中央に表示され、`isShow`プロパティで簡単に表示/非表示を制御できます。
 

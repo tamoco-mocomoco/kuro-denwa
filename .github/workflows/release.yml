@@ -1,0 +1,55 @@
+name: Release to CDN
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 🎉 リリース v${{ steps.get_version.outputs.VERSION }}
+
+            ### CDN URL
+            ```html
+            <script type="module" src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@v${{ steps.get_version.outputs.VERSION }}/kuro-denwa-component.js"></script>
+            ```
+
+            ### npm
+            ```bash
+            npm install kuro-denwa@${{ steps.get_version.outputs.VERSION }}
+            ```
+
+            ---
+
+            📦 このリリースは自動的にjsDelivr CDNで配信されます。
+            🔗 デモ: https://tamoco-mocomoco.github.io/kuro-denwa/
+          files: |
+            kuro-denwa-component.js
+            package.json
+            README.md
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Purge jsDelivr cache
+        run: |
+          curl -X POST "https://purge.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@v${{ steps.get_version.outputs.VERSION }}/kuro-denwa-component.js"
+          curl -X POST "https://purge.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@latest/kuro-denwa-component.js"
