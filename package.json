@@ -1,0 +1,36 @@
+{
+  "name": "kuro-denwa",
+  "version": "1.0.0",
+  "description": "本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Component",
+  "main": "kuro-denwa-component.js",
+  "module": "kuro-denwa-component.js",
+  "type": "module",
+  "files": [
+    "kuro-denwa-component.js",
+    "README.md"
+  ],
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "rotary-dial",
+    "phone",
+    "kuro-denwa",
+    "黒電話",
+    "japanese",
+    "retro",
+    "vintage"
+  ],
+  "author": "tamoco-mocomoco",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tamoco-mocomoco/kuro-denwa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tamoco-mocomoco/kuro-denwa/issues"
+  },
+  "homepage": "https://github.com/tamoco-mocomoco/kuro-denwa#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

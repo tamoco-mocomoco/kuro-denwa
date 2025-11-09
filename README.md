@@ -3,13 +3,39 @@
 本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Componentです。
 モーダル表示で画面中央に表示され、`isShow`プロパティで簡単に表示/非表示を制御できます。
 
+## インストール
+
+### npm
+
+```bash
+npm install kuro-denwa
+```
+
+### CDN
+
+```html
+<script type="module">
+  import 'https://cdn.jsdelivr.net/npm/kuro-denwa@latest/kuro-denwa-component.js';
+</script>
+```
+
 ## デモ
 
-`index.html`をブラウザで開いてデモを確認できます。
+リポジトリの`index.html`をブラウザで開いてデモを確認できます。
 
 ## 使い方
 
-### 基本的な使用方法
+### npmでインストールした場合
+
+```javascript
+// モジュールとしてインポート
+import 'kuro-denwa';
+
+// あとはHTMLで使用
+// <kuro-denwa id="myDial"></kuro-denwa>
+```
+
+### CDNまたは直接読み込みの場合
 
 ```html
 <!DOCTYPE html>
@@ -139,7 +165,9 @@ Custom Elements V1とShadow DOM V1をサポートしているブラウザが必�
 ```
 kuro-denwa/
 ├── kuro-denwa-component.js  # Web Component本体
+├── package.json              # npmパッケージ設定
 ├── index.html                # デモページ
+├── .npmignore                # npm公開時の除外設定
 └── README.md                 # このファイル
 ```
 

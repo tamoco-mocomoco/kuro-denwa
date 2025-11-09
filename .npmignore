@@ -1,0 +1,13 @@
+# Development files
+index.html
+.git
+.gitignore
+.claude
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
