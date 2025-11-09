@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/tamoco-mocomoco/kuro-denwa/issues"
   },
-  "homepage": "https://github.com/tamoco-mocomoco/kuro-denwa#readme",
+  "homepage": "https://tamoco-mocomoco.github.io/kuro-denwa/",
   "engines": {
     "node": ">=14.0.0"
   }
