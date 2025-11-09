@@ -67,11 +67,10 @@ class KuroDenwa extends HTMLElement {
                     position: fixed;
                     top: 0;
                     left: 0;
-                    width: 100vw;
-                    height: 100vh;
+                    width: 100%;
+                    height: 100%;
                     z-index: 9999;
                     display: none;
-                    overflow: hidden;
                 }
 
                 :host(.open) {
@@ -79,7 +78,6 @@ class KuroDenwa extends HTMLElement {
                     align-items: center;
                     justify-content: center;
                     animation: fadeIn 0.3s ease-out;
-                    overflow: hidden;
                 }
 
                 @keyframes fadeIn {
@@ -152,9 +150,9 @@ class KuroDenwa extends HTMLElement {
                     align-items: center;
                     position: relative;
                     z-index: 2;
-                    max-width: 600px;
-                    width: 90%;
-                    max-height: 85vh;
+                    max-width: 500px;
+                    width: 85%;
+                    max-height: calc(100vh - 40px);
                     overflow-y: auto;
                     overflow-x: hidden;
                     animation: slideIn 0.4s ease-out;
@@ -253,38 +251,47 @@ class KuroDenwa extends HTMLElement {
 
                 @media (max-width: 768px) {
                     .container {
-                        padding: 15px;
-                        width: 95%;
-                        max-height: 90vh;
+                        padding: 12px;
+                        width: 90%;
+                        max-width: 90vw;
+                        max-height: calc(100vh - 20px);
                     }
 
                     .title {
-                        font-size: 20px;
-                        margin-bottom: 15px;
+                        font-size: 18px;
+                        margin-bottom: 12px;
                     }
 
                     .display {
-                        padding: 12px;
-                        margin-bottom: 15px;
+                        padding: 10px;
+                        margin-bottom: 12px;
                     }
 
                     .number-display {
-                        font-size: 20px;
-                        letter-spacing: 4px;
+                        font-size: 18px;
+                        letter-spacing: 3px;
+                        min-height: 30px;
                     }
 
                     button {
-                        padding: 10px 16px;
-                        font-size: 14px;
+                        padding: 8px 14px;
+                        font-size: 13px;
                     }
 
                     .info {
-                        font-size: 12px;
-                        margin-top: 10px;
+                        font-size: 11px;
+                        margin-top: 8px;
                     }
 
                     .buttons {
-                        margin-top: 15px;
+                        margin-top: 12px;
+                        gap: 8px;
+                    }
+
+                    .close-button {
+                        font-size: 28px;
+                        width: 36px;
+                        height: 36px;
                     }
                 }
             </style>
@@ -320,12 +327,12 @@ class KuroDenwa extends HTMLElement {
 
     setupCanvas() {
         const container = this.shadowRoot.querySelector('.container');
-        const containerWidth = container.clientWidth - 40;
+        const containerWidth = container.clientWidth - 24;
 
         // モバイルの場合は画面の高さをより考慮
         const isMobile = window.innerWidth <= 768;
-        const heightFactor = isMobile ? 0.35 : 0.5;
-        const maxSize = Math.min(containerWidth, window.innerHeight * heightFactor, 500);
+        const heightFactor = isMobile ? 0.3 : 0.5;
+        const maxSize = Math.min(containerWidth, window.innerHeight * heightFactor, isMobile ? 300 : 500);
 
         this.canvas.width = maxSize;
         this.canvas.height = maxSize;
@@ -729,6 +736,10 @@ class KuroDenwa extends HTMLElement {
         if (isOpen) {
             this.classList.add('open');
 
+            // bodyのスクロールを止める
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             // ローディング状態を表示
             if (this.container) {
                 this.container.classList.add('loading');
@@ -754,6 +765,11 @@ class KuroDenwa extends HTMLElement {
             this.dispatchEvent(new CustomEvent('opened'));
         } else {
             this.classList.remove('open');
+
+            // bodyのスクロールを戻す
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+
             this.dispatchEvent(new CustomEvent('closed'));
         }
     }
