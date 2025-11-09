@@ -11,12 +11,19 @@
 npm install kuro-denwa
 ```
 
-### CDN
+### CDN (jsDelivr)
 
 ```html
+<!-- 最新版 -->
 <script type="module">
-  import 'https://cdn.jsdelivr.net/npm/kuro-denwa@latest/kuro-denwa-component.js';
+  import 'https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js';
 </script>
+```
+
+または直接scriptタグで：
+
+```html
+<script type="module" src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js"></script>
 ```
 
 ## デモ
