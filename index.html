@@ -165,8 +165,8 @@
       </div>
     </div>
 
-    <!-- Web Componentの読み込み (CDN) -->
-    <script type="module" src="kuro-denwa-component.js"></script>
+    <!-- Web Componentの読み込み -->
+    <script src="kuro-denwa-component.js"></script>
 
     <!-- イベントリスナーの設定 -->
     <script>
@@ -195,42 +195,45 @@
         // または dial.open(); でも可
       }
 
-      // イベントリスナー
-      dial.addEventListener("number-dialed", (e) => {
-        const { number, allNumbers } = e.detail;
-        addLog(
-          `番号入力: <strong>${number}</strong> (現在: ${allNumbers.join("")})`
-        );
+      // Web Componentが定義されるまで待つ
+      customElements.whenDefined('kuro-denwa').then(() => {
+        // イベントリスナー
+        dial.addEventListener("number-dialed", (e) => {
+          const { number, allNumbers } = e.detail;
+          addLog(
+            `番号入力: <strong>${number}</strong> (現在: ${allNumbers.join("")})`
+          );
+        });
+
+        dial.addEventListener("clear", () => {
+          addLog("番号をクリアしました");
+        });
+
+        dial.addEventListener("call", (e) => {
+          const { phoneNumber } = e.detail;
+          addLog(`📞 発信: <strong>${phoneNumber}</strong>`);
+          alert(`発信: ${phoneNumber}`);
+          // 発信後にモーダルを閉じる
+          dial.close();
+        });
+
+        dial.addEventListener("opened", () => {
+          addLog("ダイヤルを開きました");
+        });
+
+        dial.addEventListener("closed", () => {
+          addLog("ダイヤルを閉じました");
+        });
+
+        // 初期ログ
+        setTimeout(() => {
+          addLog("Web Component読み込み完了");
+        }, 100);
+
+        // API使用例
+        console.log("isShow:", dial.isShow);
+        console.log("入力番号:", dial.getDialedNumbers());
       });
-
-      dial.addEventListener("clear", () => {
-        addLog("番号をクリアしました");
-      });
-
-      dial.addEventListener("call", (e) => {
-        const { phoneNumber } = e.detail;
-        addLog(`📞 発信: <strong>${phoneNumber}</strong>`);
-        alert(`発信: ${phoneNumber}`);
-        // 発信後にモーダルを閉じる
-        dial.close();
-      });
-
-      dial.addEventListener("opened", () => {
-        addLog("ダイヤルを開きました");
-      });
-
-      dial.addEventListener("closed", () => {
-        addLog("ダイヤルを閉じました");
-      });
-
-      // 初期ログ
-      setTimeout(() => {
-        addLog("Web Component読み込み完了");
-      }, 100);
-
-      // API使用例
-      console.log("isShow:", dial.isShow);
-      console.log("入力番号:", dial.getDialedNumbers());
     </script>
   </body>
 </html>

@@ -380,12 +380,7 @@ class KuroDenwa extends HTMLElement {
     drawDial() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.save();
-        this.ctx.translate(this.centerX, this.centerY);
-        this.ctx.rotate(this.currentRotation);
-        this.ctx.translate(-this.centerX, -this.centerY);
-
-        // 外側の円
+        // 外側の円（固定）
         this.ctx.beginPath();
         this.ctx.arc(this.centerX, this.centerY, this.outerRadius, 0, Math.PI * 2);
         this.ctx.fillStyle = '#1a1a1a';
@@ -394,23 +389,13 @@ class KuroDenwa extends HTMLElement {
         this.ctx.lineWidth = 3;
         this.ctx.stroke();
 
-        // 内側の円
-        this.ctx.beginPath();
-        this.ctx.arc(this.centerX, this.centerY, this.innerRadius, 0, Math.PI * 2);
-        const centerGradient = this.ctx.createRadialGradient(
-            this.centerX - 20, this.centerY - 20, 10,
-            this.centerX, this.centerY, this.innerRadius
-        );
-        centerGradient.addColorStop(0, '#f5f5dc');
-        centerGradient.addColorStop(0.6, '#e8e8c8');
-        centerGradient.addColorStop(1, '#d0d0b0');
-        this.ctx.fillStyle = centerGradient;
-        this.ctx.fill();
-        this.ctx.strokeStyle = '#333';
-        this.ctx.lineWidth = 2;
-        this.ctx.stroke();
+        // 回転する部分（穴だけ）
+        this.ctx.save();
+        this.ctx.translate(this.centerX, this.centerY);
+        this.ctx.rotate(this.currentRotation);
+        this.ctx.translate(-this.centerX, -this.centerY);
 
-        // 番号の穴と番号
+        // 番号の穴（回転する）
         this.numberPositions.forEach((pos) => {
             const isHighlighted = this.highlightedNumber === pos.number;
 
@@ -442,8 +427,46 @@ class KuroDenwa extends HTMLElement {
                 this.ctx.fillStyle = 'rgba(102, 126, 234, 0.3)';
                 this.ctx.fill();
             }
+        });
 
-            const fontSize = isHighlighted ? 36 : 32;
+        this.ctx.restore();
+
+        // 内側の円（固定）
+        this.ctx.beginPath();
+        this.ctx.arc(this.centerX, this.centerY, this.innerRadius, 0, Math.PI * 2);
+        const centerGradient = this.ctx.createRadialGradient(
+            this.centerX - 20, this.centerY - 20, 10,
+            this.centerX, this.centerY, this.innerRadius
+        );
+        centerGradient.addColorStop(0, '#f5f5dc');
+        centerGradient.addColorStop(0.6, '#e8e8c8');
+        centerGradient.addColorStop(1, '#d0d0b0');
+        this.ctx.fillStyle = centerGradient;
+        this.ctx.fill();
+        this.ctx.strokeStyle = '#333';
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+
+        // 番号（固定）
+        this.numberPositions.forEach((pos) => {
+            const isHighlighted = this.highlightedNumber === pos.number;
+
+            if (isHighlighted) {
+                // ハイライト時の背景円
+                this.ctx.beginPath();
+                this.ctx.arc(pos.textX, pos.textY, 30, 0, Math.PI * 2);
+                this.ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+                this.ctx.shadowBlur = 10;
+                this.ctx.shadowColor = '#667eea';
+                this.ctx.fill();
+                this.ctx.shadowBlur = 0;
+
+                this.ctx.strokeStyle = '#667eea';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+            }
+
+            const fontSize = isHighlighted ? 38 : 32;
             this.ctx.font = `bold ${fontSize}px Arial`;
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
@@ -458,15 +481,13 @@ class KuroDenwa extends HTMLElement {
             if (isHighlighted) {
                 this.ctx.shadowBlur = 10;
                 this.ctx.shadowColor = '#667eea';
-                this.ctx.fillStyle = '#fff';
+                this.ctx.fillStyle = '#ffffff';
             } else {
                 this.ctx.fillStyle = '#fff';
             }
             this.ctx.fillText(pos.number, pos.textX, adjustedTextY);
             this.ctx.shadowBlur = 0;
         });
-
-        this.ctx.restore();
 
         // ストッパー
         const stopperBaseX = this.centerX + Math.cos(this.stopperAngle) * (this.outerRadius + 30);
