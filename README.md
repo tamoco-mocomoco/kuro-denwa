@@ -19,7 +19,7 @@ npm install kuro-denwa
 ```html
 <!-- 最新版 -->
 <script type="module">
-  import "https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js";
+  import "https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@latest/kuro-denwa-component.js";
 </script>
 ```
 
@@ -28,7 +28,7 @@ npm install kuro-denwa
 ```html
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@1.0.0/kuro-denwa-component.js"
+  src="https://cdn.jsdelivr.net/gh/tamoco-mocomoco/kuro-denwa@latest/kuro-denwa-component.js"
 ></script>
 ```
 
