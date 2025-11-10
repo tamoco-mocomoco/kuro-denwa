@@ -1,6 +1,6 @@
 {
   "name": "kuro-denwa",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "本物の黒電話のような操作感を再現したロータリーダイヤルのWeb Component",
   "main": "kuro-denwa-component.js",
   "module": "kuro-denwa-component.js",
